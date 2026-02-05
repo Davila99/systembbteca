@@ -16,7 +16,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.views.generic.base import RedirectView
 
+# Personalización del Admin
+admin.site.site_header = "SYSTEM BIBLIOTECA"
+admin.site.site_title = "SYSTEM BIBLIOTECA - Admin"
+admin.site.index_title = "Bienvenido a SYSTEM BIBLIOTECA"
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', RedirectView.as_view(url='/admin/', permanent=True)),
 ]
