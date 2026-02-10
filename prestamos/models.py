@@ -28,11 +28,16 @@ class Prestamo(models.Model):
     def __str__(self):
         return f"{self.ejemplar} → {self.lector}"
 
-    def save(self, *args, **kwargs):
-        if self.activo and not self.ejemplar.disponible:
-            raise ValidationError("Este ejemplar ya está prestado.")
+    def clean(self):
+        # Solo validar cuando se crea el préstamo
+        if self.pk is None and not self.ejemplar.disponible:
+            raise ValidationError({
+                "ejemplar": "Este ejemplar ya está prestado."
+            })
 
-        if self.activo:
+    def save(self, *args, **kwargs):
+        # Al crear el préstamo, marcar ejemplar como no disponible
+        if self.pk is None and self.activo:
             self.ejemplar.disponible = False
             self.ejemplar.save()
 
