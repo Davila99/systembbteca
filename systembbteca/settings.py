@@ -78,7 +78,7 @@ WSGI_APPLICATION = 'systembbteca.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'dbteca',
+        'NAME': 'dbeliseo',
         'USER': 'root',
         'PASSWORD': 'root',
         'HOST': '127.0.0.1', 
