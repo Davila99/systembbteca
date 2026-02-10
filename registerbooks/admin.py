@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Autor, Categoria, Editorial, Libro
+from .models import Autor, Editorial, Libro, Ejemplar
 
 
 @admin.register(Autor)
@@ -7,14 +7,6 @@ class AutorAdmin(admin.ModelAdmin):
     list_display = ("id", "nombres", "apellidos")
     search_fields = ("nombres", "apellidos")
     ordering = ("apellidos", "nombres")
-
-
-@admin.register(Categoria)
-class CategoriaAdmin(admin.ModelAdmin):
-    list_display = ("id", "nombre")
-    search_fields = ("nombre",)
-    ordering = ("nombre",)
-
 
 @admin.register(Editorial)
 class EditorialAdmin(admin.ModelAdmin):
@@ -28,7 +20,6 @@ class LibroAdmin(admin.ModelAdmin):
     list_display = (
         "titulo",
         "autor",
-        "categoria",
         "editorial",
         "edicion",
         "anio_publicacion",
@@ -39,18 +30,45 @@ class LibroAdmin(admin.ModelAdmin):
         "titulo",
         "autor__nombres",
         "autor__apellidos",
-        "categoria__nombre",
         "editorial__nombre",
-        "edicion",
         "clasificacion",
     )
 
     list_filter = (
-        "categoria",
-        "autor",
         "editorial",
+        "clasificacion",
         "anio_publicacion",
     )
 
-    ordering = ("-anio_publicacion",)
+    ordering = ("titulo",)
     list_per_page = 25
+
+    # 🚀 OPTIMIZACIÓN
+    autocomplete_fields = ("autor", "editorial")
+    list_select_related = ("autor", "editorial")
+
+
+@admin.register(Ejemplar)
+class EjemplarAdmin(admin.ModelAdmin):
+    list_display = (
+        "libro",
+        "numero_ejemplar",
+        "numero_registro",
+        "disponible",
+        "fecha_registro",
+    )
+
+    search_fields = (
+        "libro__titulo",
+        "numero_registro",
+    )
+
+    list_filter = (
+        "disponible",
+        "fecha_registro",
+    )
+
+    readonly_fields = ("fecha_registro",)
+    autocomplete_fields = ("libro",)
+
+    ordering = ("libro", "numero_ejemplar")

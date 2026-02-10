@@ -1,6 +1,5 @@
 from django.db import models
 from django.core.validators import MinValueValidator
-from datetime import date
 
 
 class Autor(models.Model):
@@ -24,18 +23,6 @@ class Editorial(models.Model):
     def __str__(self):
         return self.nombre
 
-
-class Categoria(models.Model):
-    nombre = models.CharField(max_length=100, unique=True)
-    descripcion = models.TextField(blank=True)
-
-    class Meta:
-        ordering = ["nombre"]
-
-    def __str__(self):
-        return self.nombre
-
-
 class Libro(models.Model):
     titulo = models.CharField(max_length=250)
     autor = models.ForeignKey(
@@ -48,13 +35,6 @@ class Libro(models.Model):
         on_delete=models.PROTECT,
         related_name="libros"
     )
-    categoria = models.ForeignKey(
-        Categoria,
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
-        related_name="libros"
-    )
     edicion = models.CharField(max_length=20)
     anio_publicacion = models.PositiveIntegerField(
         null=True,
@@ -62,12 +42,13 @@ class Libro(models.Model):
         validators=[MinValueValidator(1500)]
     )
     clasificacion = models.CharField(
-    max_length=50,
-    null=True,
-    blank=True
-)
+        max_length=50,
+        null=True,
+        blank=True
+    )
+
     class Meta:
-        ordering = ["-anio_publicacion", "titulo"]
+        ordering = ["titulo"]
 
     def __str__(self):
         return self.titulo
