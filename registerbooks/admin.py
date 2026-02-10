@@ -1,13 +1,12 @@
 from django.contrib import admin
-from .models import Autor, Categoria, Libro
+from .models import Autor, Categoria, Editorial, Libro
 
 
 @admin.register(Autor)
 class AutorAdmin(admin.ModelAdmin):
-    list_display = ("id", "nombre", "apellido", "nacionalidad")
-    search_fields = ("nombre", "apellido", "nacionalidad")
-    list_filter = ("nacionalidad",)
-    ordering = ("apellido", "nombre")
+    list_display = ("id", "nombres", "apellidos")
+    search_fields = ("nombres", "apellidos")
+    ordering = ("apellidos", "nombres")
 
 
 @admin.register(Categoria)
@@ -17,32 +16,41 @@ class CategoriaAdmin(admin.ModelAdmin):
     ordering = ("nombre",)
 
 
+@admin.register(Editorial)
+class EditorialAdmin(admin.ModelAdmin):
+    list_display = ("id", "nombre", "lugar_publicacion")
+    search_fields = ("nombre", "lugar_publicacion")
+    ordering = ("nombre",)
+
+
 @admin.register(Libro)
 class LibroAdmin(admin.ModelAdmin):
     list_display = (
         "titulo",
         "autor",
         "categoria",
-        "isbn",
-        "fecha_publicacion",
-        "disponible",
+        "editorial",
+        "edicion",
+        "anio_publicacion",
+        "clasificacion",
     )
 
     search_fields = (
         "titulo",
-        "isbn",
-        "autor__nombre",
-        "autor__apellido",
+        "autor__nombres",
+        "autor__apellidos",
         "categoria__nombre",
+        "editorial__nombre",
+        "edicion",
+        "clasificacion",
     )
 
     list_filter = (
-        "disponible",          # Sí / No
-        "categoria",           # Por categoría
-        "autor",               # Por autor
-        "fecha_publicacion",   # Por año/mes
+        "categoria",
+        "autor",
+        "editorial",
+        "anio_publicacion",
     )
 
-    date_hierarchy = "fecha_publicacion"
+    ordering = ("-anio_publicacion",)
     list_per_page = 25
-    ordering = ("-fecha_publicacion",)
